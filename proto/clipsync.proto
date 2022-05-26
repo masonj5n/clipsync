@@ -1,0 +1,18 @@
+syntax = "proto3";
+package clipsync_rpc;
+
+service Clipsync {
+	rpc YankUpdate (YankUpdateReq) returns (YankUpdateResp);
+}
+
+message Yank {
+	string contents = 1;
+}
+
+message YankUpdateReq {
+	Yank yank = 1;
+}
+
+message YankUpdateResp {
+	string response = 1;
+}
