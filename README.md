@@ -8,7 +8,7 @@ Clipsync is a neovim plugin that pushes the content of the `+` buffer to a remot
 It allows you to yank into the `+` buffer while in a remote `nvim` session and have that yanked content show up in your host system's clipboard.
 
 ## Requirements
-A (relatively new) Rust toolchain installed.
+A (relatively new) Rust toolchain installed on both the remote and host machines.
 
 ## Installation
 
@@ -28,9 +28,9 @@ On the machine you want the clipboard to be updated on:
 
 `cargo install clipsync`
 
-Then run the server `clipsync-server`.
+Then run the server `clipsync-receiver`.
 
 ## Connecting to the remote server
-With the server running on the host machine, in neovim run `:ClipsyncConnect http://<hostname/ip>:8089`, modified to match the hostname or IP of the host machine running the server.
+With the server running on the host machine, in neovim run `:ClipsyncConnect "http://<hostname/ip>:8089"`, modified to match the hostname or IP of the host machine running the server.
 
 Clipsync itself does _not_ take care of encryption/TLS. If you're running it across the public internet, consider using `wireguard` or another VPN/tunneling solution to make sure the contents of your clipboard are not going across the public internet in plain text. (Wireguard also makes it easier to get an IP address for your host machine)
