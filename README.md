@@ -19,7 +19,7 @@ On the _remote_ machine you wish to receive clipboard updates from, install the 
 `Plug "masonj188/clipsync", {'do': 'cargo install --path .' }`
 
 #### Packer
-`use { "~/projects/clipsync", run = 'cargo install --path .' }`
+`use { "masonj188/clipsync", run = 'cargo install --path .' }`
 
 For the post-install scripts to work, `cargo` must be in your path. If `~/.cargo/bin` is _not_ in your path, set `g:clipsync_bin` to the full path of the `clipsync-plugin` binary. I.e. `let g:clipsync_bin = '/home/foo/.cargo/bin/clipsync-plugin'` or `vim.g.clipsync_bin='/home/foo/.cargo/bin/clipsync-plugin'` for lua configs.
 
