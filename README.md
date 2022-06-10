@@ -1,3 +1,6 @@
+# WIP!
+There are several "unwraps" that need to be handled correctly and ergonomic upgrades to be made.
+
 # Clipsync
 
 Clipsync is a neovim plugin that pushes the content of the `+` buffer to a remote host's clipboard any time content is yanked into it.
