@@ -28,6 +28,7 @@ endfunction
 function! s:configureCommands()
   command! -nargs=1 ClipsyncConnect :call s:clip_connect(<args>)
   command! ClipsyncDisconnect :call s:clip_disconnect(<f-args>)
+  command! ClipsyncStatus :call s:clip_status(<f-args>)
 endfunction
 
 function! s:clip_connect(uri)
@@ -39,6 +40,10 @@ endfunction
 function! s:clip_disconnect()
   call rpcnotify(s:clipsyncJobId, 'disconnect')
   call s:disableAuto()
+endfunction
+
+function! s:clip_status()
+  call rpcnotify(s:clipsyncJobId, 'status')
 endfunction
 
 function! s:disableAuto()

@@ -14,6 +14,7 @@ enum Messages {
     },
     Disconnect,
     Yank(String),
+    Status,
     Unknown(String, String),
 }
 
@@ -53,6 +54,10 @@ impl TryFrom<(String, Vec<Value>)> for Messages {
                 Ok(Messages::Disconnect)
             }
 
+            ("status", _) => {
+                info!("received status message");
+                Ok(Messages::Status)
+            }
             (e, v) => Ok(Messages::Unknown(
                 e.to_string(),
                 v.iter().map(|v| v.to_string()).collect::<String>(),
@@ -65,7 +70,7 @@ impl TryFrom<(String, Vec<Value>)> for Messages {
 
 struct EventHandler {
     nvim: Neovim,
-    cs_client: Option<ClipsyncClient<Channel>>,
+    cs_client: Option<(ClipsyncClient<Channel>, String)>,
 }
 
 impl EventHandler {
@@ -86,7 +91,7 @@ impl EventHandler {
             match Messages::try_from((event, values)) {
                 Ok(Messages::Yank(v)) => {
                     info!("executing yank message: {v}");
-                    if let Some(client) = &mut self.cs_client {
+                    if let Some((client, _)) = &mut self.cs_client {
                         client
                             .yank_update(YankUpdateReq {
                                 yank: Some(Yank { contents: v }),
@@ -102,7 +107,7 @@ impl EventHandler {
                 Ok(Messages::Connect { address }) => {
                     info!("executing connect message: {}", address.uri().to_string());
                     match ClipsyncClient::connect(*address.clone()).await {
-                        Ok(client) => self.cs_client = Some(client),
+                        Ok(client) => self.cs_client = Some((client, address.uri().to_string())),
                         Err(e) => {
                             error!("failed to connect to client: {e}");
                             self.nvim
@@ -115,7 +120,16 @@ impl EventHandler {
                     info!("executing disconnect message");
                     self.cs_client = None;
                 }
-
+                Ok(Messages::Status) => {
+                    info!("executing status message");
+                    match &self.cs_client {
+                        Some(c) => self
+                            .nvim
+                            .command(&format!("echo \"connected to {}\"", c.1))
+                            .unwrap(),
+                        None => self.nvim.command("echo \"disconnected\"").unwrap(),
+                    };
+                }
                 Err(e) => error!("couldn't convert message into Message: {e}"),
             }
         }
