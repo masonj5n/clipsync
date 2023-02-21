@@ -28,22 +28,23 @@ endfunction
 function! s:configureCommands()
   command! -nargs=1 ClipsyncConnect :call s:clip_connect(<args>)
   command! ClipsyncDisconnect :call s:clip_disconnect(<f-args>)
-  command! ClipsyncStatus :call s:clip_status(<f-args>)
+  command! ClipsyncStatus :call g:Clip_Status(<f-args>)
 endfunction
 
 function! s:clip_connect(uri)
   echo a:uri
-  call rpcnotify(s:clipsyncJobId, 'connect', a:uri)
+  call rpcrequest(s:clipsyncJobId, 'connect', a:uri)
   call s:enableAuto()
 endfunction
 
 function! s:clip_disconnect()
-  call rpcnotify(s:clipsyncJobId, 'disconnect')
+  call rpcrequest(s:clipsyncJobId, 'disconnect')
   call s:disableAuto()
 endfunction
 
-function! s:clip_status()
-  call rpcnotify(s:clipsyncJobId, 'status')
+function! g:Clip_Status()
+  let s:res = rpcrequest(s:clipsyncJobId, 'status')
+  return s:res
 endfunction
 
 function! s:disableAuto()
