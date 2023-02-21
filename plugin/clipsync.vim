@@ -65,7 +65,7 @@ function! s:yank(regName)
     return
   endif
   let s:contents = getreg('+')
-  call rpcnotify(s:clipsyncJobId, 'yank', s:contents)
+  call rpcrequest(s:clipsyncJobId, 'yank', s:contents)
 endfunction
 
 " Initialize RPC
