@@ -8,7 +8,8 @@ Clipsync is a neovim plugin that pushes the content of the `+` buffer to a remot
 It allows you to yank into the `+` buffer while in a remote `nvim` session and have that yanked content show up in your host system's clipboard.
 
 ## Requirements
-A (relatively new) Rust toolchain installed on both the remote and host machines.
+- A (relatively new) Rust toolchain installed on both the remote and host machines.
+- Cmake
 
 ## Installation
 
